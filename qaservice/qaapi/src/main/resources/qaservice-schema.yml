@@ -1,0 +1,143 @@
+openapi: 3.0.0
+info:
+  title: QA API
+  description: API description in QA.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8082/vi
+    description: local server
+
+paths:
+  /qaList/{qaCount}:
+    get:
+      summary: Lists the Question/Answers
+      operationId: getQaList
+      parameters:
+          - in: path
+            name: qaCount
+            required: true
+            description: Number of Questions to be returned
+            schema:
+              type: integer
+              example: 3
+              default: 10
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QA'
+
+components:
+  schemas:
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: string
+        exception:
+          type: string
+
+    Base:
+      allOf:
+        - $ref: '#/components/schemas/ErrorMessage'
+        - type: object
+          properties:
+            id:
+              type: string
+              example: 2c9a07616cccd629016cccd66c370002
+            creationDate:
+              type: integer
+            lastModifiedDate:
+              type: integer
+            owner:
+              type: string
+            ownerOrganization:
+              type: string
+    Choice:
+      type: object
+      properties:
+        index:
+          type: integer
+          example: 1
+        value:
+          type: string
+          example: Not Sure
+        visible:
+          type: boolean
+          example: true
+          default: true
+        disabled:
+          type: boolean
+          example: true
+          default: false
+        correct:
+          type: boolean
+          example: false
+          default: false
+        hint:
+          type: string
+          example: How Do I Know?
+        hintVisible:
+          type: boolean
+          example: true
+          default: false
+        checked:
+          type: boolean
+          example: true
+          default: false
+      required:
+        - index
+        - value
+
+    QuestionType:
+      type: string
+      enum:
+        - textType
+        - boolType
+        - multType
+      default: multType
+    QA:
+      allOf:
+        - $ref: '#/components/schemas/Base'
+        - type: object
+          required:
+            - addressLine
+            - country
+            - companyName
+          properties:
+            question:
+              type: string
+              example: Who Are you?
+            choices:
+              type: array
+              items:
+                $ref: '#/components/schemas/Choice'
+            revealed:
+              type: boolean
+              example: false
+              default: false
+            maxSelection:
+              type: integer
+              example: 2
+            selectionCounter:
+              type: integer
+              example: 1
+              default: 0
+            point:
+              type: integer
+              example: 1
+              default: 0
+            submitted:
+              type: boolean
+              example: true
+              default: false
+            validated:
+              type: boolean
+              example: false
+              default: false
+            qType:
+              $ref: '#/components/schemas/QuestionType'

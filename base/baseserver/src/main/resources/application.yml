@@ -1,0 +1,3 @@
+server:
+  hostname: ${VHOSTNAME:${HOSTNAME:base.local.io}}
+  port: ${VPORT:2001}

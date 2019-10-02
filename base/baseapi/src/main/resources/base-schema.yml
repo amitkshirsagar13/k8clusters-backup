@@ -1,0 +1,42 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://base.localhost.io'
+info:
+  description: >-
+    The Base API.
+  version: 1.0.0
+  title: Base API
+  contact:
+    name: Amit Kshirsagar
+tags:
+  - name: base
+    description: Base Service
+paths:
+  /base:
+    get:
+      tags:
+        - base
+      operationId: getBaseID
+      summary: Get ID
+      responses:
+        '200':
+          description: Get ID success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Base'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: string
+    Base:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1uu2g3g33

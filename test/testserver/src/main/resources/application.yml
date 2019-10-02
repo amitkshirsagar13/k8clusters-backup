@@ -1,0 +1,3 @@
+server:
+  hostname: ${VHOSTNAME:${HOSTNAME:test.local.k8cluster.io}}
+  port: ${VPORT:2001}
