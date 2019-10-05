@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: ${VAPPLICATIONNAME:k8s-admin}
+  profiles:
+    active: ${VPROFILE:native}
+  cloud:
+    config:
+      username: ${VCONFIGUSER:config}
+      password: ${VCONFIGPASS:config}
+      label: master
+      uri: http://${VCONFIGUSER:config}:${VCONFIGPASS:config}@${VCONFIGHOST:localhost}:${VCONFIGPORT:7761}${VCONFIGPATH:/cloud-config}

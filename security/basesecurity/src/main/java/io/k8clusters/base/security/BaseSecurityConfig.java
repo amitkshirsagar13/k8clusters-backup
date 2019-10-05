@@ -13,9 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,54 +33,8 @@ public class BaseSecurityConfig {
                 .cors();
     }
 
-
     @Configuration
     @Order(10)
-    public static class ActuatorBasicSecurityConfig extends WebSecurityConfigurerAdapter {
-        @Autowired
-        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-            auth.inMemoryAuthentication().withUser("admin")
-                    .password(passwordEncoder().encode("admin123")).authorities("ADMIN").roles("ADMIN");
-        }
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/actuator/**").authorizeRequests().anyRequest().authenticated().and()
-                    .httpBasic();
-        }
-
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
-    }
-
-    @Configuration
-    @Order(20)
-    public class SwaggerActuatorBasicSecurityConfig extends WebSecurityConfigurerAdapter {
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/swagger**").authorizeRequests().anyRequest()
-                    .hasRole("ADMIN").and().httpBasic();
-        }
-    }
-
-
-
-    @Configuration
-    @Order(40)
-    public class BootAdminBasicSecurityConfig extends WebSecurityConfigurerAdapter {
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/boot-admin**").authorizeRequests().anyRequest()
-                    .hasRole("ADMIN").and().httpBasic();
-        }
-    }
-
-
-
-    @Configuration
-    @Order(50)
     public class ApiJwtSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -99,6 +53,42 @@ public class BaseSecurityConfig {
                     .authorizeRequests()
                     .antMatchers("/api/**")
                     .authenticated();
+        }
+    }
+
+
+    @Configuration
+    @Order(50)
+    public static class ActuatorBasicSecurityConfig extends WebSecurityConfigurerAdapter {
+        @Autowired
+        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+            auth.inMemoryAuthentication().withUser("admin")
+                    .password(passwordEncoder().encode("admin123")).authorities("ADMIN").roles("ADMIN");
+        }
+
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder();
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            BaseSecurityConfig.enableCorsCsrf(http);
+            http
+                    .authorizeRequests()
+                    .antMatchers("/health", "/actuator/health", "/actuator/hystrix.stream", "/turbine.stream").permitAll()
+                    .antMatchers("/actuator/**", "/swagger**").hasRole("ADMIN")
+                    .and()
+                    .formLogin()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/signin")
+                    .loginPage("/login").permitAll()
+                    .usernameParameter("txtUsername")
+                    .passwordParameter("txtPassword")
+                    .and()
+                    .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
+                    .and()
+                    .rememberMe().tokenValiditySeconds(2592000).key("mySecret!").rememberMeParameter("checkRememberMe");
         }
     }
 

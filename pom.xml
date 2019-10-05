@@ -22,6 +22,7 @@
 
     <modules>
         <module>base</module>
+        <module>cluster</module>
         <module>security</module>
         <module>test</module>
         <module>qaservice</module>
@@ -125,28 +126,13 @@
             <!-- k8clusters-admin -->
             <dependency>
                 <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${admin-server}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
                 <artifactId>spring-boot-admin-server-ui-login</artifactId>
                 <version>${admin-ui}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-server-ui-hystrix</artifactId>
-                <version>${admin-ui}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-server-cloud</artifactId>
-                <version>${admin-server}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-server</artifactId>
-                <version>${admin-server}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-server-ui</artifactId>
-                <version>${admin-server}</version>
             </dependency>
 
 

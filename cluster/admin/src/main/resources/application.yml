@@ -1,0 +1,9 @@
+server:
+  hostname: ${VHOSTNAME:${HOSTNAME:admin.local.k8cluster.io}}
+  port: ${VPORT:3000}
+  servlet:
+    context-path: ${VCONTEXTPATH:/boot-admin}
+
+spring:
+  security:
+    basic: false
