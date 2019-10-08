@@ -1,6 +1,7 @@
 package io.k8clusters.base.security;
 
 import io.k8clusters.base.filters.JwtTokenAuthenticationFilter;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -12,15 +13,23 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 
 @EnableWebSecurity // Enable security config. This annotation denotes config for spring security.
@@ -80,18 +89,45 @@ public class BaseSecurityConfig {
                     .antMatchers("/actuator/**", "/swagger**").hasRole("ADMIN")
                     .and()
                     .formLogin()
+                    .successHandler(successHandler())
+                    .failureHandler(failureHandler())
                     .loginPage("/login")
                     .loginProcessingUrl("/signin")
                     .loginPage("/login").permitAll()
-                    .usernameParameter("txtUsername")
-                    .passwordParameter("txtPassword")
+                    .usernameParameter("userName")
+                    .passwordParameter("password")
                     .and()
                     .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
                     .and()
                     .rememberMe().tokenValiditySeconds(2592000).key("mySecret!").rememberMeParameter("checkRememberMe");
         }
-    }
 
+        private AuthenticationSuccessHandler successHandler() {
+            return new AuthenticationSuccessHandler() {
+                @Override
+                public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+                    httpServletResponse.setContentType("application/json;charset=UTF-8");
+                    httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+                    httpServletResponse.getWriter().write(new JSONObject()
+                            .put("message", SecurityContextHolder.getContext().getAuthentication().getName())
+                            .toString());
+                }
+            };
+        }
+
+        private AuthenticationFailureHandler failureHandler() {
+            return new AuthenticationFailureHandler() {
+                @Override
+                public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+                    httpServletResponse.setContentType("application/json;charset=UTF-8");
+                    httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    httpServletResponse.getWriter().write(new JSONObject()
+                            .put("message", "Access Denied")
+                            .toString());
+                }
+            };
+        }
+    }
 
     /**
      * Only works for endpoints with no authentication.

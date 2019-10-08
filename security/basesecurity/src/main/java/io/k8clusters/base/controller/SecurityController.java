@@ -15,4 +15,5 @@ public class SecurityController {
     public String accessDenied() {
         return "/error/access-denied";
     }
+
 }

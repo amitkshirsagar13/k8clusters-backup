@@ -1,6 +1,6 @@
 package io.k8clusters.base.filters;
 
-import io.k8clusters.base.utils.JWTUtils;
+import io.k8clusters.base.utils.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,7 +53,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
             Map<String, String> claims = null;
             // 4. Validate the token
             try {
-                claims = JWTUtils.getVerifiedClaims(token);
+                claims = JwtUtil.getVerifiedClaims(token);
             } catch (IllegalArgumentException e) {
             }
 

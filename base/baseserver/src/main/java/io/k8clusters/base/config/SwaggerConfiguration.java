@@ -1,6 +1,5 @@
 package io.k8clusters.base.config;
 
-import com.google.common.base.Predicate;
 import io.swagger.models.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
