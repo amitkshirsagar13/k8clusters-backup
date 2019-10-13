@@ -3,6 +3,13 @@ server:
   port: ${VPORT:2001}
 
 spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: k8cluster
+      repositories:
+        type: AUTO
   thymeleaf:
     cache: false
     check-template: true

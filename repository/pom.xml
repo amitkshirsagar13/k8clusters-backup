@@ -10,24 +10,35 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>io.k8clusters.security</groupId>
-    <artifactId>security</artifactId>
+    <groupId>io.k8clusters</groupId>
+    <artifactId>repository</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>basesecurity</module>
+        <module>common-repo</module>
+        <module>mongo-repo</module>
+        <module>mysql-repo</module>
     </modules>
-    <properties>
-        <k8clusters>1.0-SNAPSHOT</k8clusters>
-    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.k8clusters</groupId>
-                <artifactId>k8clusters</artifactId>
-                <version>${k8clusters}</version>
+                <artifactId>common-repo</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.k8clusters</groupId>
+                <artifactId>mongo-repo</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.k8clusters</groupId>
+                <artifactId>mysql-repo</artifactId>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
+    
 </project>

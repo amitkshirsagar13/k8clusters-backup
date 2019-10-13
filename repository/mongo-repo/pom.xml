@@ -5,28 +5,27 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.k8clusters.test</groupId>
-        <artifactId>test</artifactId>
+        <groupId>io.k8clusters</groupId>
+        <artifactId>repository</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>io.k8clusters.test</groupId>
-    <artifactId>testserver</artifactId>
+    <groupId>io.k8clusters</groupId>
+    <artifactId>mongo-repo</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
-            <groupId>io.k8clusters.base</groupId>
-            <artifactId>baseserver</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.k8clusters.security</groupId>
-            <artifactId>basesecurity</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.k8clusters</groupId>
-            <artifactId>mongo-repo</artifactId>
+            <artifactId>common-repo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.k8clusters.qaservice</groupId>
+            <artifactId>qaapi</artifactId>
         </dependency>
     </dependencies>
-    
 </project>

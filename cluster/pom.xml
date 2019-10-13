@@ -18,6 +18,9 @@
     <modules>
         <module>admin</module>
     </modules>
+    <properties>
+        <k8clusters>1.0-SNAPSHOT</k8clusters>
+    </properties>
 
     <dependencies>
     </dependencies>
@@ -26,7 +29,7 @@
             <dependency>
                 <groupId>io.k8clusters</groupId>
                 <artifactId>k8clusters</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${k8clusters}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
