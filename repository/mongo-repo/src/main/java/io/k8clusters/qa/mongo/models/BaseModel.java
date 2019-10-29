@@ -1,4 +1,4 @@
-package io.k8clusters.repo.mongo.models;
+package io.k8clusters.qa.mongo.models;
 
 import org.springframework.data.annotation.Id;
 

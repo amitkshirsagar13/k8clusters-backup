@@ -1,4 +1,4 @@
-package io.k8clusters.repo.mongo.models;
+package io.k8clusters.qa.repo.mongo.models;
 
 public class Choice {
 

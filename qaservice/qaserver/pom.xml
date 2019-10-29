@@ -25,6 +25,10 @@
             <artifactId>basesecurity</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.k8clusters</groupId>
+            <artifactId>mongo-repo</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.k8clusters.qaservice</groupId>
             <artifactId>qaapi</artifactId>
         </dependency>
