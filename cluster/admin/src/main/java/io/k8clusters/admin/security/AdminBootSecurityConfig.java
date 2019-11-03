@@ -15,6 +15,4 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableAutoConfiguration
 public class AdminBootSecurityConfig {
 
-
-
 }

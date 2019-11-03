@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: k8clusters-boot-admin
+  profiles:
+    active: ${VPROFILE:native}
+  cloud:
+    config:
+      label: ${VLABEL:master}
+      uri: http://${VCONFIGHOST:localhost}:${VCONFIGPORT:7761}/cloud-config
+      username: ${VCONFIGUSER:config}
+      password: ${VCONFIGPASS:config}

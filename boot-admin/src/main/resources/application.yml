@@ -1,0 +1,30 @@
+server:
+  hostname: ${VHOSTNAME:${HOSTNAME:boot.local.k8cluster.io}}
+  port: ${VPORT:1001}
+
+#eureka:
+#  client:
+#    enabled: true
+#    fetch-registry: true
+spring:
+  thymeleaf:
+    cache: false
+    check-template: true
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    mode: HTML
+    prefix: classpath:/templates/
+    suffix: .html
+    # excluded-view-names:
+    # template-resolver-order:
+    # view-names:
+  boot:
+    admin:
+      #      context-path: /boot-admin
+      probed-endpoints: health,env,metrics,httptrace:trace,threaddump:dump,jolokia,info,logfile,refresh,flyway,liquibase,heapdump,loggers,auditevents
+      routes:
+        endpoints: env,metrics,trace,dump,jolokia,info,configprops,trace,logfile,refresh,flyway,liquibase,heapdump,loggers,auditevents,hystrix.stream
+      discovery:
+        enabled: true
