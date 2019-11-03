@@ -7,8 +7,4 @@ import springfox.documentation.service.ApiInfo;
 @Component
 public class TestSwaggerConfig extends SwaggerConfiguration {
 
-    @Override
-    public ApiInfo apiInfo() {
-        return apiInfoBuilder().title("Base Test").description("Swagger Documentation for the Base APIs").version("3.0").build();
-    }
 }

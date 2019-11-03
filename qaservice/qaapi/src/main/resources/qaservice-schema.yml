@@ -10,28 +10,94 @@ servers:
 paths:
   /qaList/{qaCount}:
     get:
-      summary: Lists the Question/Answers
       operationId: getQaList
+      security:
+        - ApiKeyAuth: []
+      summary: Lists the Question/Answers
+      tags:
+        - QaController
       parameters:
-          - in: path
-            name: qaCount
-            required: true
-            description: Number of Questions to be returned
-            schema:
-              type: integer
-              example: 3
-              default: 10
+          - $ref: '#/components/parameters/qaCount'
       responses:
         200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/QA'
-
+          $ref: '#/components/responses/successQA'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+
+  parameters:
+    qaCount:
+      in: path
+      name: qaCount
+      required: true
+      description: Number of Questions to be returned
+      schema:
+        type: integer
+        example: 3
+        default: 10
+
+  responses:
+    successQA:
+      description: Get ID success
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/QA'
+    ImageResponse:     # Can be referenced as '#/components/responses/ImageResponse'
+      description: An image.
+      content:
+        image/*:
+          schema:
+            type: string
+            format: binary
+    GenericError:      # Can be referenced as '#/components/responses/GenericError'
+      description: An error occurred.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    404:
+      description: The specified resource was not found.
+    500:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+
   schemas:
     ErrorMessage:
       type: object
@@ -43,7 +109,6 @@ components:
 
     Base:
       allOf:
-        - $ref: '#/components/schemas/ErrorMessage'
         - type: object
           properties:
             id:
@@ -100,6 +165,7 @@ components:
         - boolType
         - multType
       default: multType
+
     QA:
       allOf:
         - $ref: '#/components/schemas/Base'
@@ -141,3 +207,4 @@ components:
               default: false
             qType:
               $ref: '#/components/schemas/QuestionType'
+

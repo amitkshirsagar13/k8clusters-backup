@@ -1,6 +1,5 @@
 package io.k8clusters.base.config;
 
-import io.swagger.models.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,10 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -27,8 +23,8 @@ import java.util.List;
 
 @Configuration
 @EnableSwagger2
-@ConfigurationProperties
 @EnableConfigurationProperties
+@ConfigurationProperties(prefix = "swagger")
 public abstract class SwaggerConfiguration implements WebMvcConfigurer {
 
     @Value("${server.port:8080}")
@@ -39,6 +35,11 @@ public abstract class SwaggerConfiguration implements WebMvcConfigurer {
 
     @Value("${server.servlet.context-path:/}")
     String contextPath;
+
+    private String title;
+    private String description;
+    private String version;
+    private Contacts contacts = new Contacts();
 
     @Autowired
     Environment environment;
@@ -82,12 +83,7 @@ public abstract class SwaggerConfiguration implements WebMvcConfigurer {
         return newArrayList(new SecurityReference("Authorization", authorizationScopes));
     }
 
-    public abstract ApiInfo apiInfo();
-
     public ApiInfoBuilder apiInfoBuilder() {
-        Contact contact = new Contact();
-        contact.setName("Amit Kshirsagar");
-        contact.setEmail("amit.kshirsagar.13@gmail.com");
 
         return new ApiInfoBuilder()
                 .termsOfServiceUrl("http://" + getHostname() + ":" + getPort() + contextPath + "/v2/api-docs?group=k8clusters")
@@ -121,5 +117,69 @@ public abstract class SwaggerConfiguration implements WebMvcConfigurer {
      */
     public void setHostname(String hostname) {
         this.hostname = hostname;
+    }
+
+    public ApiInfo apiInfo() {
+        return apiInfoBuilder().title(getTitle()).description(getDescription()).version(getVersion()).contact(getContact()).build();
+    }
+
+    private Contact getContact() {
+        Contact contact = new Contact(contacts.getName(), contacts.getUrl(), contacts.getEmail());
+        return contact;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public static class Contacts {
+
+        private String name;
+        private String email;
+        private String url;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
     }
 }

@@ -1,5 +1,5 @@
 server:
-  hostname: ${VHOSTNAME:${HOSTNAME:test.local.k8cluster.io}}
+  hostname: ${VHOSTNAME:${HOSTNAME:qa.local.k8cluster.io}}
   port: ${VPORT:2002}
 
 
@@ -17,3 +17,13 @@ spring:
     # excluded-view-names:
     # template-resolver-order:
     # view-names:
+
+swagger:
+  title: QaService
+  description: |
+    Returns the list of the QA Items with given number of items in list. Currently, only has Math Operation Questions.
+  version: 3.0
+  contacts:
+    name: Amit Kshirsagar
+    email: amit.kshirsagar.13@gmail.com
+    url: https://amitkshirsagar13.github.io/about

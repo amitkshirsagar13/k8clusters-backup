@@ -18,6 +18,6 @@ public class BaseController implements BaseApi {
 
     @Override
     public ResponseEntity<Base> getBaseID() {
-        return new ResponseEntity<>(baseService.getBase("x83nss84n"), HttpStatus.OK);
+        return ResponseEntity.ok(baseService.getBase("x83nss84n"));
     }
 }
