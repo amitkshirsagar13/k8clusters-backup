@@ -26,6 +26,7 @@
         <module>cluster</module>
         <module>security</module>
         <module>repository</module>
+        <module>coreservices</module>
         <module>test</module>
         <module>qaservice</module>
     </modules>

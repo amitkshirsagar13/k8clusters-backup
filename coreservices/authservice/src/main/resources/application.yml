@@ -1,6 +1,6 @@
 server:
-  hostname: ${VHOSTNAME:${HOSTNAME:test.local.k8cluster.io}}
-  port: ${VPORT:2000}
+  hostname: ${VHOSTNAME:${HOSTNAME:authservice.local.k8cluster.io}}
+  port: ${VPORT:2001}
 
 spring:
   data:
