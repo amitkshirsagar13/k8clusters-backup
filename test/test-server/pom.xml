@@ -5,15 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.k8clusters.qaservice</groupId>
-        <artifactId>qaservice</artifactId>
+        <groupId>io.k8clusters.test</groupId>
+        <artifactId>test</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>io.k8clusters.qaservice</groupId>
-    <artifactId>qaserver</artifactId>
+    <groupId>io.k8clusters.test</groupId>
+    <artifactId>test-server</artifactId>
     <version>1.0-SNAPSHOT</version>
-
 
     <dependencies>
         <dependency>
@@ -28,14 +27,6 @@
             <groupId>io.k8clusters</groupId>
             <artifactId>mongo-repo</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.k8clusters.qaservice</groupId>
-            <artifactId>qaapi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
+    
 </project>

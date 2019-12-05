@@ -28,7 +28,7 @@
         <module>repository</module>
         <module>core-services</module>
         <module>test</module>
-        <module>qaservice</module>
+        <module>qa-service</module>
     </modules>
 
     <properties>
@@ -106,8 +106,8 @@
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>io.k8clusters.qaservice</groupId>
-                <artifactId>qaapi</artifactId>
+                <groupId>io.k8clusters.qa-service</groupId>
+                <artifactId>qa-api</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
 

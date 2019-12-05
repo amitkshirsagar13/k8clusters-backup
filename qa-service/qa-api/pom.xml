@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.k8clusters.qaservice</groupId>
-        <artifactId>qaservice</artifactId>
+        <groupId>io.k8clusters.qa-service</groupId>
+        <artifactId>qa-service</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>io.k8clusters.qaservice</groupId>
-    <artifactId>qaapi</artifactId>
+    <groupId>io.k8clusters.qa-service</groupId>
+    <artifactId>qa-api</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <build>

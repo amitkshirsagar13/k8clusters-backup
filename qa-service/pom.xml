@@ -10,13 +10,13 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>io.k8clusters.qaservice</groupId>
-    <artifactId>qaservice</artifactId>
+    <groupId>io.k8clusters.qa-service</groupId>
+    <artifactId>qa-service</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>qaapi</module>
-        <module>qaserver</module>
+        <module>qa-api</module>
+        <module>qa-server</module>
     </modules>
     <dependencies>
         <dependency>

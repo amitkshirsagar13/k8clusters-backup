@@ -20,8 +20,8 @@
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.k8clusters.qaservice</groupId>
-            <artifactId>qaapi</artifactId>
+            <groupId>io.k8clusters.qa-service</groupId>
+            <artifactId>qa-api</artifactId>
         </dependency>
     </dependencies>
 </project>

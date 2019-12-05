@@ -16,6 +16,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>testserver</module>
+        <module>test-server</module>
     </modules>
 </project>
