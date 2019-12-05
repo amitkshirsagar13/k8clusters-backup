@@ -13,5 +13,14 @@
     <groupId>io.k8clusters</groupId>
     <artifactId>mysql-repo</artifactId>
     <version>1.0-SNAPSHOT</version>
-
+    <dependencies>
+        <dependency>
+            <groupId>io.k8clusters</groupId>
+            <artifactId>common-repo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation=" http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- User Roles Enum values -->
+    <bean id="user_role_SYSTEM_ADMINISTRATOR"
+          class="io.k8clusters.auth.models.Role">
+        <property name="name" value="SYSTEM_ADMINISTRATOR"/>
+        <property name="externalId" value="ROLE-0000"/>
+    </bean>
+
+    <!-- User Roles Enum values -->
+    <bean id="user_role_USER"
+          class="io.k8clusters.auth.models.Role">
+        <property name="name" value="USER"/>
+        <property name="externalId" value="ROLE-0001"/>
+    </bean>
+</beans>

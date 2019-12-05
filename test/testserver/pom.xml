@@ -17,11 +17,11 @@
     <dependencies>
         <dependency>
             <groupId>io.k8clusters.base</groupId>
-            <artifactId>baseserver</artifactId>
+            <artifactId>base-server</artifactId>
         </dependency>
         <dependency>
             <groupId>io.k8clusters.security</groupId>
-            <artifactId>basesecurity</artifactId>
+            <artifactId>base-security</artifactId>
         </dependency>
         <dependency>
             <groupId>io.k8clusters</groupId>

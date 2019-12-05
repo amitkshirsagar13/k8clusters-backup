@@ -2,6 +2,7 @@ package io.k8clusters.qa.mongo.models;
 
 import org.springframework.data.annotation.Id;
 
+
 public class BaseModel {
 
     @Id

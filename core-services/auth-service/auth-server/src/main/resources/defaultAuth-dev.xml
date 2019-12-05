@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation=" http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="userRoles.xml" />
+
+    <import resource="defaultAuth-test.xml" />
+
+    <bean id="adminUser"
+          class="io.k8clusters.auth.models.User">
+        <property name="id" value="100internal0id000000000000000001"/>
+        <property name="userName" value="amitkshirsagar13"/>
+        <property name="email" value="amit.kshirsagar.13@gmail.com"/>
+        <property name="active" value="true"/>
+        <property name="deleted" value="false" />
+        <property name="userRoles">
+            <list>
+                <ref bean="user_role_SYSTEM_ADMINISTRATOR"/>
+                <ref bean="user_role_USER"/>
+            </list>
+        </property>
+        <property name="externalId" value="USR-00001"/>
+    </bean>
+
+    <bean id="demoUser"
+          class="io.k8clusters.auth.models.User">
+        <property name="id" value="100internal0id000000000000000002"/>
+        <property name="userName" value="poonamkshirsagar13"/>
+        <property name="email" value="poonam.kshirsagar.13@gmail.com"/>
+        <property name="active" value="true"/>
+        <property name="deleted" value="false" />
+        <property name="userRoles">
+            <list>
+                <ref bean="user_role_USER"/>
+            </list>
+        </property>
+        <property name="externalId" value="USR-00002"/>
+    </bean>
+
+    <bean id="testUser"
+          class="io.k8clusters.auth.models.User">
+        <property name="id" value="100internal0id000000000000000003"/>
+        <property name="userName" value="amoghkshirsagar13"/>
+        <property name="email" value="amogh.kshirsagar.13@gmail.com"/>
+        <property name="active" value="true"/>
+        <property name="deleted" value="false" />
+        <property name="userRoles">
+            <list>
+                <ref bean="user_role_SYSTEM_ADMINISTRATOR"/>
+            </list>
+        </property>
+        <property name="externalId" value="USR-00003"/>
+    </bean>
+
+</beans>

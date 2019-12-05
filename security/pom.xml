@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>basesecurity</module>
+        <module>base-security</module>
     </modules>
     <properties>
         <k8clusters>1.0-SNAPSHOT</k8clusters>

@@ -14,8 +14,8 @@
     <artifactId>base</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>baseapi</module>
-        <module>baseserver</module>
+        <module>base-api</module>
+        <module>base-server</module>
     </modules>
 
     <dependencies>

@@ -14,6 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * QaController:
+ *
+ * @author Amit Kshirsagar
+ * @version 1.0
+ * @Modifications Added initial revision of the application
+ * @since 12/4/2019
+ */
+
 @RestController
 @RequestMapping("/api")
 public class QaController implements QaListApi {

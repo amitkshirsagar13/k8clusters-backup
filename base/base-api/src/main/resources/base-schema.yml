@@ -1,0 +1,173 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://base.localhost.io'
+info:
+  description: >-
+    The Base API.
+  version: 1.0.0
+  title: Base API
+  contact:
+    name: Amit Kshirsagar
+tags:
+  - name: ImportXml
+    description: Import data from Xml File with beans Definitions.
+  - name: Base
+    description: Base Service
+paths:
+  /admin/importXml/{mode}:
+    put:
+      security:
+        - JwtAuthKey: []
+      operationId: importXml
+      tags:
+        - ImportXml
+      description: importXml DB with the give mode.
+      parameters:
+        - name: mode
+          in: path
+          required: true
+          description: mode required
+          schema:
+            type: string
+            example: OVERRIDE
+            enum:
+              - OVERRIDE
+              - INCREMENTAL
+            default: OVERRIDE
+      responses:
+        200:
+          $ref: '#/components/responses/XmlImporter'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/404NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /base:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Base
+      operationId: getBaseID
+      summary: Get ID
+      responses:
+        200:
+          $ref: '#/components/responses/success'
+        400:
+          $ref: '#/components/responses/404NotFound'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorizationd
+
+  responses:
+    success:
+      description: Get ID success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Base'
+    404NotFound:       # Can be referenced as '#/components/responses/404NotFound'
+      description: The specified resource was not found.
+    XmlImporter:
+      description: SUCCESS
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/XmlImporter'
+
+    BadRequest:
+      description: BAD_REQUEST
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: UNAUTHORIZED
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: FORBIDDEN
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: INTERNAL_SERVER_ERROR
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ImageResponse:     # Can be referenced as '#/components/responses/ImageResponse'
+      description: An image.
+      content:
+        image/*:
+          schema:
+            type: string
+            format: binary
+
+    GenericError:      # Can be referenced as '#/components/responses/GenericError'
+      description: An error occurred.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: string
+        correlation-id:
+          type: string
+    Entity:
+      type: object
+      properties:
+        externalId:
+          type: string
+        message:
+          type: string
+    EntityList:
+      type: object
+      properties:
+        count:
+          type: integer
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity'
+    XmlImporter:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          required:
+            - toCreate
+            - created
+            - notCreated
+          properties:
+            toCreate:
+              type: integer
+            created:
+              type: integer
+            notCreated:
+              $ref: '#/components/schemas/EntityList'
+    Base:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1uu2g3g33

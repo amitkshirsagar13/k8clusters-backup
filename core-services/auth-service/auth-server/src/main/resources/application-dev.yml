@@ -1,0 +1,6 @@
+spring.profiles.include:
+  - test
+
+spring:
+  flyway:
+    enabled: true

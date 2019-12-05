@@ -1,0 +1,53 @@
+server:
+  hostname: ${VHOSTNAME:${HOSTNAME:authservice.local.k8cluster.io}}
+  port: ${VPORT:2001}
+
+spring:
+  jackson:
+    default-property-inclusion: non_null
+  #  data:
+#    mongodb:
+#      host: ${VMONGODBHOST:mongodb.local.k8cluster.io}
+#      port: ${VMONGODBPORT:27017}
+#      database: ${VMONGODBDATA:k8cluster}
+#      repositories:
+#        type: AUTO
+  datasource:
+    url: jdbc:mysql://${VDATABASE:mysql.local.k8cluster.io}:${VPORT:3306}/${AUTHSCHEMA:${user.name}_auth_db}?createDatabaseIfNotExist=true&autoReconnect=true
+    name: authdb
+    username: ${VDBUSER:admin}
+    password: ${VDBPASS:admin123}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    show-sql: false
+  thymeleaf:
+    cache: false
+    check-template: true
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    mode: HTML
+    prefix: classpath:/templates/
+    suffix: .html
+    # excluded-view-names:
+    # template-resolver-order:
+    # view-names:
+
+k8clusters:
+  auth:
+    xmlFileName: ${VAUTHXML:defaultAuth-${spring.profiles.active}.xml}
+
+swagger:
+  title: AuthService
+  description: |
+    Returns the list of the AuthService.
+  version: 3.0
+  contacts:
+    name: Amit Kshirsagar
+    email: amit.kshirsagar.13@gmail.com
+    url: https://amitkshirsagar13.github.io/about

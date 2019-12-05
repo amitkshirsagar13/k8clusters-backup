@@ -4,6 +4,13 @@ server:
 
 
 spring:
+  data:
+    mongodb:
+      host: ${VMONGODBHOST:mongodb.local.k8cluster.io}
+      port: ${VMONGODBPORT:27017}
+      database: ${VMONGODBDATA:k8cluster}
+      repositories:
+        type: AUTO
   thymeleaf:
     cache: false
     check-template: true
