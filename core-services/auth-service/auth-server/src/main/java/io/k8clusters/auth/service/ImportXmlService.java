@@ -1,4 +1,4 @@
-package io.k8clusters.auth.recreatedb;
+package io.k8clusters.auth.service;
 
 import io.k8clusters.auth.properties.AuthServiceProperties;
 import io.k8clusters.auth.repo.repository.IdMapperRepository;

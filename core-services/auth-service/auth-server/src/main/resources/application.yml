@@ -40,6 +40,15 @@ spring:
 
 k8clusters:
   auth:
+    audience: ${AUTH_API_V2_AUDIENCE:https://k8cluster.auth0.com}
+    callbackUrl: ${AUTH_API_V2_AUDIENCE:http://localhost:4200}
+    clientId: ${AUTH_CLIENT_ID:UmR78TRzZkW9DtQcv3Nikq2ZMe6dHcl0}
+    clientSecret: ${AUTH_CLIENT_SECRET:zpwxTfOKJboRKZyfJ_CyvyGR-GgHXTKRnpEBkGBfEuHm_Da4WnKvU0P4UCRwNDcZ}
+    domain: ${AUTH_DOMAIN:https://k8cluster.auth0.com}
+    swaggerUser: ${SWAGGER_USER:user}
+    swaggerUserPassword: ${SWAGGER_USER_PASS:Amn#1234}
+    swaggerAdmin: ${SWAGGER_ADMIN:admin}
+    swaggerAdminPassword: ${SWAGGER_ADMIN_PASS:Amn#1234}
     xmlFileName: ${VAUTHXML:defaultAuth-${spring.profiles.active}.xml}
 
 swagger:

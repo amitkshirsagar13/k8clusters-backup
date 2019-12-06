@@ -1,0 +1,123 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://base.localhost.io'
+info:
+  description: >-
+    The Base API.
+  version: 1.0.0
+  title: Base API
+  contact:
+    name: Amit Kshirsagar
+tags:
+  - name: AuthService
+    description: Authorization Service.
+paths:
+  /authorization/authToken:
+    get:
+      security:
+        - JwtAuthKey: []
+      operationId: authToken
+      tags:
+        - AuthService
+      description: Returns the Auth Token
+      parameters:
+        - name: code
+          in: query
+          required: true
+          description: code required
+          schema:
+            type: string
+      responses:
+        200:
+          $ref: '#/components/responses/AuthToken'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/404NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorizationd
+
+  responses:
+    404NotFound:       # Can be referenced as '#/components/responses/404NotFound'
+      description: The specified resource was not found.
+    AuthToken:
+      description: SUCCESS
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthToken'
+
+    BadRequest:
+      description: BAD_REQUEST
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: UNAUTHORIZED
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: FORBIDDEN
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: INTERNAL_SERVER_ERROR
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ImageResponse:     # Can be referenced as '#/components/responses/ImageResponse'
+      description: An image.
+      content:
+        image/*:
+          schema:
+            type: string
+            format: binary
+
+    GenericError:      # Can be referenced as '#/components/responses/GenericError'
+      description: An error occurred.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: string
+        correlation-id:
+          type: string
+    AuthToken:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          required:
+            - accessToken
+          properties:
+            accessToken:
+              type: string
+            userName:
+              type: string
+            userId:
+              type: string

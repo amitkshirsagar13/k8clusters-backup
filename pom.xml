@@ -22,11 +22,11 @@
 
     <modules>
         <module>base</module>
-        <module>boot-admin</module>
-        <module>cluster</module>
         <module>security</module>
         <module>repository</module>
         <module>core-services</module>
+        <module>boot-admin</module>
+        <module>cluster</module>
         <module>test</module>
         <module>qa-service</module>
     </modules>
