@@ -16,6 +16,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +47,7 @@ public class AuthService {
             String token = jsonObject.get("id_token").textValue();
             Map<String, String> claims = getClaimsWithAuthValidation(token);
             authToken.setAccessToken(token);
-            authToken.setUserName(claims.get("username"));
+            authToken.setUserName(claims.get("name"));
         } catch (K8Exception e) {
             authToken.setError(e.getMessage());
             throw e;
@@ -74,12 +75,12 @@ public class AuthService {
     private String requestAccessAndRefreshTokens(String grantCode) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("grant_type", "authorization_code");
         map.add("client_id", authServiceProperties.getClientId());
         map.add("client_secret", authServiceProperties.getClientSecret());
-
+//        map.add("audience", authServiceProperties.getApiV2Audience());
         map.add("code", grantCode);
         map.add("redirect_uri", authServiceProperties.getCallbackUrl());
 

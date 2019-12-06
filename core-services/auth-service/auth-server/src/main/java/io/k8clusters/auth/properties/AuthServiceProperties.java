@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AuthServiceProperties extends XmlImporterProperties {
-    private String audience;
+    private String apiV2Audience;
     private String callbackUrl;
     private String clientId;
     private String clientSecret;
