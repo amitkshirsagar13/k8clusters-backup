@@ -16,7 +16,7 @@ import javax.persistence.Entity;
  */
 @Getter
 @Setter
-@Entity
+@Entity(name="ROLE")
 public class Role extends BaseModelAudit {
     private String name;
 }

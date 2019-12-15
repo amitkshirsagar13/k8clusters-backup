@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-@Entity
+@Entity(name="USER")
 public class User extends BaseModel {
     @Column(unique = true)
     private String userName;
@@ -27,7 +27,7 @@ public class User extends BaseModel {
 
     @ManyToMany
     @JoinTable(
-            name = "users_roles",
+            name = "USERS_ROLES",
             joinColumns = @JoinColumn(
                     name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(

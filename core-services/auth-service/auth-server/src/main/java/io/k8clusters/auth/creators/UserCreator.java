@@ -1,9 +1,7 @@
 package io.k8clusters.auth.creators;
 
-import io.k8clusters.auth.models.Role;
 import io.k8clusters.auth.models.User;
 import io.k8clusters.auth.repo.models.BaseEntity;
-import io.k8clusters.auth.repo.models.IdMapper;
 import io.k8clusters.auth.repo.repository.IdMapperRepository;
 import io.k8clusters.auth.repo.repository.UserRepository;
 import io.k8clusters.base.creators.Creator;
