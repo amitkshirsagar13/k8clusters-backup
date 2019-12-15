@@ -25,5 +25,6 @@ public class K8ClusterRedisCacheConfiguration {
     private String password;
     public int maxRedirects;
     private String nodes;
+    private boolean clusterMode;
 
 }

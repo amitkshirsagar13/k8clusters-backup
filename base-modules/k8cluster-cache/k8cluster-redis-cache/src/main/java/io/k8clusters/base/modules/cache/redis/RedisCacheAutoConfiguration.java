@@ -6,12 +6,16 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisClusterConfiguration;
+import org.springframework.data.redis.connection.RedisConfiguration;
 import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.util.Arrays;
 
 /**
  * RedisCacheAutoConfiguration:
@@ -36,14 +40,23 @@ public class RedisCacheAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     JedisConnectionFactory jedisConnectionFactory(K8ClusterRedisCacheConfiguration k8ClusterRedisCacheConfiguration) {
-//        RedisClusterConfiguration redisConfiguration = new RedisClusterConfiguration(Arrays.asList(k8ClusterRedisCacheConfiguration.getNodes().split(",")));
-//        redisConfiguration.setMaxRedirects(k8ClusterRedisCacheConfiguration.getMaxRedirects());
-//        redisConfiguration.setPassword(k8ClusterRedisCacheConfiguration.getPassword());
+        RedisConfiguration redisConfiguration = null;
 
-        RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration(k8ClusterRedisCacheConfiguration.getRedisHost(), k8ClusterRedisCacheConfiguration.getRedisPort());
-        redisConfiguration.setPassword(RedisPassword.of(k8ClusterRedisCacheConfiguration.getPassword()));
+        log.info("K8Cluster Redis Cache mode is: '{}'", k8ClusterRedisCacheConfiguration.isClusterMode());
 
-        final JedisConnectionFactory connectionFactory = new JedisConnectionFactory(redisConfiguration);
+        RedisClusterConfiguration redisClusterConfiguration = (RedisClusterConfiguration) redisConfiguration;
+        RedisStandaloneConfiguration redisStandaloneConfiguration = (RedisStandaloneConfiguration) redisConfiguration;
+
+        if (k8ClusterRedisCacheConfiguration.isClusterMode()) {
+            redisClusterConfiguration = new RedisClusterConfiguration(Arrays.asList(k8ClusterRedisCacheConfiguration.getNodes().split(",")));
+            redisClusterConfiguration.setMaxRedirects(k8ClusterRedisCacheConfiguration.getMaxRedirects());
+            redisClusterConfiguration.setPassword(RedisPassword.of(k8ClusterRedisCacheConfiguration.getPassword()));
+        } else {
+            redisStandaloneConfiguration = new RedisStandaloneConfiguration(k8ClusterRedisCacheConfiguration.getRedisHost(), k8ClusterRedisCacheConfiguration.getRedisPort());
+            redisStandaloneConfiguration.setPassword(RedisPassword.of(k8ClusterRedisCacheConfiguration.getPassword()));
+        }
+
+        final JedisConnectionFactory connectionFactory = k8ClusterRedisCacheConfiguration.isClusterMode() ? new JedisConnectionFactory(redisClusterConfiguration) : new JedisConnectionFactory(redisStandaloneConfiguration);
         return connectionFactory;
     }
 
