@@ -1,0 +1,38 @@
+server:
+  hostname: ${VHOSTNAME:${HOSTNAME:test-module.local.k8cluster.io}}
+  port: ${VPORT:2000}
+
+k8cluster:
+  aws:
+    region: eu-west-1
+    credentialsClass: com.amazonaws.auth.profile.ProfileCredentialsProvider
+  #    credentialsClass: com.amazonaws.auth.InstanceProfileCredentialsProvider
+  modules:
+    dynamodb:
+      integrative: true
+      environmentPrefix: integrative
+      region: eu-west-1
+    cache:
+      redis:
+        clusterMode: false
+        redisHost: localhost
+        redisPort: 6379
+        password: redis
+        nodes: localhost:6379,127.0.0.1:6379
+  swagger:
+    title: Modules Test Application
+    description: |-
+      Test Modules with importing dependencies
+    version: 1.0.0
+    contacts:
+      name: Amit Kshirsagar
+      email: amit.kshirsagar.13@gmail.com
+      url: https://www.github.com/amitkshirsagar13
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect

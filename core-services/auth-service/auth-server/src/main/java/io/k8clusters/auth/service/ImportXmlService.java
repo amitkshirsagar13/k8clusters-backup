@@ -1,9 +1,9 @@
 package io.k8clusters.auth.service;
 
-import io.k8clusters.auth.properties.AuthServiceProperties;
 import io.k8clusters.auth.repo.repository.IdMapperRepository;
 import io.k8clusters.base.creators.Creator;
 import io.k8clusters.base.dto.XmlImporter;
+import io.k8clusters.base.properties.AuthServiceProperties;
 import io.k8clusters.base.services.BaseImportXmlService;
 import lombok.Getter;
 import lombok.Setter;
