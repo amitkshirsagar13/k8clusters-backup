@@ -18,6 +18,7 @@
         <webjars-bootstrap>3.3.7</webjars-bootstrap>
         <jquery>3.2.1</jquery>
         <json>20190722</json>
+        <jwks-rsa>0.8.3</jwks-rsa>
     </properties>
 
     <dependencies>
@@ -61,6 +62,15 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${json}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>jwks-rsa</artifactId>
+            <version>${jwks-rsa}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
     

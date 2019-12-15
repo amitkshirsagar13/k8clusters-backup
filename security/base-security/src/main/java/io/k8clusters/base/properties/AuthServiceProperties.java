@@ -1,6 +1,5 @@
-package io.k8clusters.auth.properties;
+package io.k8clusters.base.properties;
 
-import io.k8clusters.base.properties.XmlImporterProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,4 +19,5 @@ public class AuthServiceProperties extends XmlImporterProperties {
     private String clientId;
     private String clientSecret;
     private String domain;
+    private String issuer;
 }

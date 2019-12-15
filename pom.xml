@@ -21,6 +21,7 @@
     <description>Parent for k8clusters with advanced maven implementation</description>
 
     <modules>
+        <module>base-modules</module>
         <module>base</module>
         <module>security</module>
         <module>repository</module>
@@ -182,6 +183,28 @@
                 <version>${admin-ui}</version>
             </dependency>
 
+            <!-- Modules -->
+            <dependency>
+                <groupId>io.k8clusters</groupId>
+                <artifactId>k8cluster-aws-environment-configuration</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.k8clusters</groupId>
+                <artifactId>k8cluster-aws-dynamodb</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.k8clusters</groupId>
+                <artifactId>k8cluster-redis-cache</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.k8clusters</groupId>
+                <artifactId>k8cluster-swagger-configuration</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -258,5 +281,4 @@
             </snapshots>
         </repository>
     </repositories>
-
 </project>

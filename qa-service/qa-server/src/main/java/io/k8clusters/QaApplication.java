@@ -1,13 +1,14 @@
 package io.k8clusters;
 
+import io.k8clusters.base.properties.AuthServiceProperties;
 import io.k8clusters.base.service.BaseService;
+import io.k8clusters.base.utils.JwtUtil;
 import io.k8clusters.qa.config.QAServiceSwaggerConfiguration;
 import io.k8clusters.qa.repo.QaRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 /**
@@ -35,6 +36,17 @@ public class QaApplication {
     @ConfigurationProperties(prefix = "swagger")
     public QAServiceSwaggerConfiguration qaServiceSwaggerConfiguration() {
         return new QAServiceSwaggerConfiguration();
+    }
+
+    @Bean
+    @ConfigurationProperties("k8clusters.auth")
+    public AuthServiceProperties authServiceProperties(){
+        return new AuthServiceProperties();
+    }
+
+    @Bean
+    public JwtUtil jwtUtil(AuthServiceProperties authServiceProperties) {
+        return new JwtUtil(authServiceProperties);
     }
 
 }

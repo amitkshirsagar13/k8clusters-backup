@@ -1,0 +1,12 @@
+k8cluster:
+  aws:
+    region: eu-west-1
+    credentialsClass: com.amazonaws.auth.profile.ProfileCredentialsProvider
+#    credentialsClass: com.amazonaws.auth.InstanceProfileCredentialsProvider
+  modules:
+    dynamodb:
+      integrative: true
+      environmentPrefix: integrative
+      development:
+        hostName: localhost
+        httpPort: 8000

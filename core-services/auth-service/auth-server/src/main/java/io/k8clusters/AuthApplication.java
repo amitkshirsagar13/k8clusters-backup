@@ -4,14 +4,15 @@ import io.k8clusters.auth.creators.RoleCreator;
 import io.k8clusters.auth.creators.UserCreator;
 import io.k8clusters.auth.models.Role;
 import io.k8clusters.auth.models.User;
-import io.k8clusters.auth.properties.AuthServiceProperties;
 import io.k8clusters.auth.repo.repository.IdMapperRepository;
 import io.k8clusters.auth.repo.repository.RoleRepository;
 import io.k8clusters.auth.repo.repository.UserRepository;
 import io.k8clusters.auth.service.AuthService;
 import io.k8clusters.auth.service.ImportXmlService;
 import io.k8clusters.base.creators.Creator;
+import io.k8clusters.base.properties.AuthServiceProperties;
 import io.k8clusters.base.service.BaseService;
+import io.k8clusters.base.utils.JwtUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -38,10 +39,16 @@ public class AuthApplication {
     public AuthService authService(RestTemplate restTemplate, AuthServiceProperties authServiceProperties) {
         return new AuthService(restTemplate, authServiceProperties);
     }
+
     @Bean
     @ConfigurationProperties("k8clusters.auth")
     public AuthServiceProperties authServiceProperties(){
         return new AuthServiceProperties();
+    }
+
+    @Bean
+    public JwtUtil jwtUtil(AuthServiceProperties authServiceProperties) {
+        return new JwtUtil(authServiceProperties);
     }
 
     @Bean

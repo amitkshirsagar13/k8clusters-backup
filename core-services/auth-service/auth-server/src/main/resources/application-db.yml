@@ -1,6 +1,6 @@
-spring.profiles.include:
-  - default
-
 spring:
+  profiles:
+    include:
+      - default
   flyway:
     enabled: true
