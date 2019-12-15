@@ -34,4 +34,9 @@ public class DynamoDBMessage {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return String.format("{'id':'%s','message':'%s'", getId(), getMessage());
+    }
 }

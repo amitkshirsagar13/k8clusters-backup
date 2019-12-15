@@ -1,6 +1,7 @@
 package io.k8clusters.base.modules.test;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import io.k8clusters.base.modules.aws.dynamodb.integrative.DynamoDBIntegrativeInitializer;
 import io.k8clusters.base.modules.test.core.MessageRepository;
 import io.k8clusters.base.modules.test.core.MessageService;
@@ -15,6 +16,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.List;
 
 /**
  * TestApplication:
@@ -76,6 +79,15 @@ public class Application implements CommandLineRunner {
         msg.setId("1357");
         msg.setMessage("{'name':'Amit Kshirsagar', 'message':'Hello World!!!'}");
         dynamoDBMapper.save(msg);
+        msg.setId("7531");
+        msg.setMessage("{'name':'Poonam Kshirsagar', 'message':'Hello Love!!!'}");
+        dynamoDBMapper.save(msg);
+        msg.setId("12357");
+        msg.setMessage("{'name':'Amogh Kshirsagar', 'message':'Hello Future!!!'}");
+        dynamoDBMapper.save(msg);
+
+        List<DynamoDBMessage> dynamoDBMessages = dynamoDBMapper.scan(DynamoDBMessage.class, new DynamoDBScanExpression());
+        dynamoDBMessages.stream().forEach(System.out::println);
     }
 
 }
