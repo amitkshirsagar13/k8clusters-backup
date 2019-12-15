@@ -19,12 +19,12 @@ import lombok.*;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class K8ClusterRedisCacheConfiguration {
+    private boolean clusterMode;
     private boolean usePooling;
     private String redisHost;
     private int redisPort;
     private String password;
     public int maxRedirects;
     private String nodes;
-    private boolean clusterMode;
 
 }
