@@ -1,5 +1,5 @@
 .aws
 .terraform
-aws/.terraform.tfstate.lock.info
-aws/terraform.tfstate
-aws/terraform.tfstate.backup
+.terraform.tfstate.lock.info
+terraform.tfstate
+terraform.tfstate.backup
