@@ -1,8 +1,9 @@
 #!/bin/bash
-format=`blkid -o value -s TYPE /dev/xvdh`
+format=`sudo blkid -o value -s TYPE /dev/xvdh`
+echo $format
 if [ $format != 'ext4' ]
 then
-sudo mkfs -t ext4 /dev/xvdh
+sudo mkfs.ext4 /dev/xvdh
 fi
 sudo mkdir -p /storage
 sudo chmod 777 -R /storage

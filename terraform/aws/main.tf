@@ -1,7 +1,15 @@
 provider "aws" {
   profile                 = "terraform"
   region                  = "ap-southeast-1"
-  shared_credentials_file = "D:/opt/aws/credentials"
+  shared_credentials_file = ".aws/credentials"
+}
+
+data "aws_vpc" "main" {
+  id = "vpc-0e20d3b890c8edfba"
+}
+
+data "aws_internet_gateway" "gw" {
+  internet_gateway_id = "igw-026b2861ab3287ba0"
 }
 
 data "aws_availability_zone" "linux" {
@@ -12,80 +20,53 @@ data "aws_availability_zone" "windows" {
   name = "ap-southeast-1b"
 }
 
-resource "aws_vpc" "main" {
-  enable_dns_support = true
-  cidr_block = "10.0.0.0/16"
-}
-
 resource "aws_vpn_gateway" "vpn" {
   tags = {
-    Name = "demo-vpn-gateway"
+    Name = "main-vpn-gateway"
   }
 }
 
-resource "aws_internet_gateway" "gw" {
-  vpc_id = "${aws_vpc.main.id}"
-
-  tags = {
-    Name = "main"
-  }
+data "aws_iam_instance_profile" "ssm" {
+  name = "AmazonSSMRoleForInstancesQuickSetup"
 }
 
 resource "aws_route_table" "main_route" {
-  vpc_id = "${aws_vpc.main.id}"
-
+  vpc_id = "${data.aws_vpc.main.id}"
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.gw.id}"
+    gateway_id = "${data.aws_internet_gateway.gw.id}"
   }
-
   tags = {
     Name = "publicRouteTable"
   }
 }
 
-resource "aws_route_table_association" "route_ass" {
-  subnet_id      = "${aws_subnet.sn_linux.id}"
-  route_table_id = "${aws_route_table.main_route.id}"
-}
-
 resource "aws_vpn_gateway_attachment" "vpn_attachment" {
-  vpc_id         = "${aws_vpc.main.id}"
+  vpc_id         = "${data.aws_vpc.main.id}"
   vpn_gateway_id = "${aws_vpn_gateway.vpn.id}"
 }
 
-resource "aws_subnet" "sn_windows" {
-  vpc_id     = "${aws_vpc.main.id}"
-  availability_zone = "${data.aws_availability_zone.windows.name}"
-  cidr_block = "10.0.10.0/24"
-  tags = {
-    Name = "sn_windows"
-  }
-}
-
 resource "aws_subnet" "sn_linux" {
-  vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = "10.0.1.0/24"
-
+  vpc_id     = "${data.aws_vpc.main.id}"
+  cidr_block = "172.31.50.0/24"
+  availability_zone = "${data.aws_availability_zone.linux.name}"
   tags = {
     Name = "sn_linux"
   }
 }
 
-resource "aws_eip" "linux" {
-    instance = "${aws_instance.linux.id}"
-    vpc = true
-}
-
-resource "aws_eip" "windows" {
-    instance = "${aws_instance.windows.id}"
-    vpc = true
+resource "aws_subnet" "sn_windows" {
+  vpc_id     = "${data.aws_vpc.main.id}"
+  cidr_block = "172.31.60.0/24"
+  availability_zone = "${data.aws_availability_zone.windows.name}"
+  tags = {
+    Name = "sn_windows"
+  }
 }
 
 resource "aws_security_group" "linux" {
     name = "vpc_linux"
     description = "Allow traffic to pass from the private subnet to the internet"
-
     ingress {
         from_port = 80
         to_port = 80
@@ -98,19 +79,13 @@ resource "aws_security_group" "linux" {
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
-    ingress {
-        from_port = -1
-        to_port = -1
-        protocol = "icmp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
     egress {
       from_port       = 0
       to_port         = 0
       protocol        = "-1"
       cidr_blocks     = ["0.0.0.0/0"]
     }
-    vpc_id = "${aws_vpc.main.id}"
+    vpc_id = "${data.aws_vpc.main.id}"
 }
 
 resource "aws_security_group" "windows" {
@@ -125,7 +100,7 @@ resource "aws_security_group" "windows" {
     }
     ingress {
       from_port   = 5985
-      to_port     = 5986
+      to_port     = 5985
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
     }
@@ -135,34 +110,39 @@ resource "aws_security_group" "windows" {
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
     }
-    ingress {
-        from_port = -1
-        to_port = -1
-        protocol = "icmp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
     egress {
       from_port       = 0
       to_port         = 0
       protocol        = "-1"
       cidr_blocks     = ["0.0.0.0/0"]
     }
-    vpc_id = "${aws_vpc.main.id}"
+    vpc_id = "${data.aws_vpc.main.id}"
 }
 
-resource "tls_private_key" "ubuntu" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
+resource "aws_s3_bucket" "images" {
+  bucket = "s3-amit-kshirsagar-13"
+  acl    = "public-read"
+}
+
+resource "aws_eip" "windows" {
+    instance = "${aws_instance.windows.id}"
+    vpc = true
+}
+
+resource "aws_eip" "linux" {
+    instance = "${aws_instance.linux.id}"
+    vpc = true
 }
 
 resource "aws_instance" "linux" {
-  ami           = "ami-08b3278ea6e379084"
+  ami           = "ami-061eb2b23f9f8839c"
   instance_type = "t2.micro"
   availability_zone = "${data.aws_availability_zone.linux.name}"
   subnet_id = "${aws_subnet.sn_linux.id}"
   security_groups = ["${aws_security_group.linux.id}"]
-  key_name      = "ubuntu"
+  iam_instance_profile = "${data.aws_iam_instance_profile.ssm.name}"
 
+  key_name      = "ec2"
 
   tags = {
     Name = "HelloWorld-Linux"
@@ -174,7 +154,7 @@ resource "null_resource" "linux_provisioner" {
     host        = "${aws_eip.linux.public_ip}"
     type        = "ssh"
     user        = "ubuntu"
-    private_key = "${file("C:/opt/aws/ubuntu.pem")}"
+    private_key = "${file("ec2.pem")}"
   }
   
   provisioner "file" {
@@ -183,7 +163,7 @@ resource "null_resource" "linux_provisioner" {
   }
 
   provisioner "file" {
-    source      = "index.html"
+    source      = "index.linux.html"
     destination = "/tmp/index.html"
   }
 
@@ -222,11 +202,6 @@ resource "aws_volume_attachment" "ebs_linux_attachment" {
   depends_on = [aws_eip_association.eip_assoc]
 }
 
-resource "aws_s3_bucket" "images" {
-  bucket = "s3-amit-kshirsagar-13"
-  acl    = "public-read"
-}
-
 resource "aws_instance" "windows" {
   ami = "ami-0231f120d90c28482"
   instance_type = "t2.micro"
@@ -234,28 +209,57 @@ resource "aws_instance" "windows" {
   availability_zone = "${data.aws_availability_zone.windows.name}"
   subnet_id = "${aws_subnet.sn_windows.id}"
   security_groups = ["${aws_security_group.windows.id}"]
-  key_name      = "ubuntu"
-
+  iam_instance_profile = "${data.aws_iam_instance_profile.ssm.name}"
+  key_name      = "ec2"
 
   tags = {
     Name = "HelloWorld-Windows"
   }
-
+  get_password_data      = true
   user_data = <<EOF
   <script>
     winrm quickconfig -q & winrm set winrm/config @{MaxTimeoutms="1800000"} & winrm set winrm/config/service @{AllowUnencrypted="true"} & winrm set winrm/config/service/auth @{Basic="true"}
   </script>
   <powershell>
     netsh advfirewall firewall add rule name="WinRM in" protocol=TCP dir=in profile=any localport=5985 remoteip=any localip=any action=allow
-    # Set Administrator password
     $admin = [adsi]("WinNT://./administrator, user")
     $admin.psbase.invoke("SetPassword", "password")
-    # Bring ebs volume online with read-write access
-    Get-Disk | Where-Object IsOffline -Eq $True | Set-Disk -IsOffline $False
-    Get-Disk | Where-Object isReadOnly -Eq $True | Set-Disk -IsReadOnly $False
-    Install-WindowsFeature -name Web-Server -IncludeManagementTools
   </powershell>
   EOF
+}
+
+resource "null_resource" "windows_provisioner" {
+  connection {
+    host        = "${aws_eip.windows.public_ip}"
+    type     = "winrm"
+    user     = "Administrator"
+    password = "${rsadecrypt(aws_instance.windows.password_data, file("ec2.pem"))}"
+
+    # set from default of 5m to 10m to avoid winrm timeout
+    timeout = "6m"
+  }
+  
+  provisioner "file" {
+    source      = "script.ps1"
+    destination = "C:/script.ps1"
+  }
+  
+  provisioner "file" {
+    source      = "diskpart.txt"
+    destination = "C:/diskpart.txt"
+  }
+  
+  provisioner "file" {
+    source      = "index.windows.html"
+    destination = "C:/index.html"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "powershell C:/script.ps1",
+    ]
+  }
+  depends_on = [aws_volume_attachment.ebs_windows_attachment]
 }
 
 resource "aws_ebs_volume" "ebs_windows" {
@@ -265,6 +269,7 @@ resource "aws_ebs_volume" "ebs_windows" {
     Name = "Windows"
   }
 }
+
 resource "aws_volume_attachment" "ebs_windows_attachment" {
   device_name  = "xvdj"
   volume_id    = "${aws_ebs_volume.ebs_windows.id}"
@@ -279,28 +284,9 @@ resource "aws_eip_association" "eip_windows" {
   depends_on = [aws_instance.windows]
 }
 
-# resource "null_resource" "windows_provisioner" {
-#   connection {
-#     host        = "${aws_eip.windows.public_ip}"
-#     type     = "winrm"
-#     user     = "Administrator"
-#     password = "5tCPLjELNKC75.9EEqUeeUloRP;iJhMA"
-
-#     # set from default of 5m to 10m to avoid winrm timeout
-#     timeout = "6m"
-#   }
-  
-#   provisioner "file" {
-#     source      = "index.html"
-#     destination = "D:/src/index.html"
-#   }
-
-#   depends_on = [aws_volume_attachment.ebs_windows_attachment]
-# }
-
 resource "aws_elb" "lb" {
   name               = "lb-elb"
-  availability_zones = ["${data.aws_availability_zone.linux.name}", "${data.aws_availability_zone.windows.name}"]
+  # availability_zones = ["${data.aws_availability_zone.linux.name}", "${data.aws_availability_zone.windows.name}"]
   subnets            = ["${aws_subnet.sn_linux.id}", "${aws_subnet.sn_windows.id}"]
 
   access_logs {
@@ -334,4 +320,13 @@ resource "aws_elb" "lb" {
   tags = {
     Name = "HelloWorld-elb"
   }
+}
+
+output "ec2_password" {
+  value = "${rsadecrypt(aws_instance.windows.password_data, file("ec2.pem"))}"
+}
+
+
+output "vpc_cdir" {
+  value = "${data.aws_vpc.main.cidr_block}"
 }
